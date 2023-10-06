@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 
 function Calcutator({ workouts }) {
   const [number, setNumber] = useState(workouts.at(0).numExercises);
@@ -6,16 +6,19 @@ function Calcutator({ workouts }) {
   const [speed, setSpeed] = useState(90);
   const [durationBreak, setDurationBreak] = useState(5);
 
-  const duration = (number * sets * speed) / 60 + (sets - 1) * durationBreak;
-  const mins = Math.floor(duration);
-  const seconds = (duration - mins) * 60;
+  const duration = number * sets * speed;
+  const mins = Math.floor(duration / 60);
+  const seconds = Math.floor(duration % 60);
 
   return (
     <>
       <form>
         <div>
           <label> Type of workout </label>
-          <select value={number} onChange={(e) => setNumber(e.target.value)}>
+          <select
+            value={number}
+            onChange={(e) => setNumber(Number(e.target.value))}
+          >
             {workouts.map((workout) => (
               <option value={workout.numExercises} key={workout.name}>
                 {workout.name} ({workout.numExercises} exercises)
@@ -30,7 +33,7 @@ function Calcutator({ workouts }) {
             min="1"
             max="5"
             value={sets}
-            onChange={(e) => setSets(e.target.value)}
+            onChange={(e) => setSets(Number(e.target.value))}
           />
           <span> {sets} </span>
         </div>
@@ -42,7 +45,7 @@ function Calcutator({ workouts }) {
             max="180"
             step="30"
             value={speed}
-            onChange={(e) => setSpeed(e.target.value)}
+            onChange={(e) => setSpeed(Number(e.target.value))}
           />
           <span> {speed} sec/exercises </span>
         </div>
@@ -53,7 +56,7 @@ function Calcutator({ workouts }) {
             min="1"
             max="10"
             value={durationBreak}
-            onChange={(e) => setDurationBreak(e.target.value)}
+            onChange={(e) => setDurationBreak(Number(e.target.value))}
           />
           <span> {durationBreak} minutes/break </span>
         </div>
@@ -61,8 +64,8 @@ function Calcutator({ workouts }) {
       <section>
         <button> - </button>
         <p>
-          {mins < 10 && "0"}
-          {mins}:{seconds < 10 && "0"}
+          {mins < 10 && 0}
+          {mins}:{seconds < 10 && 0}
           {seconds}
         </p>
         <button> + </button>
@@ -71,4 +74,4 @@ function Calcutator({ workouts }) {
   );
 }
 
-export default Calcutator;
+export default memo(Calcutator);
