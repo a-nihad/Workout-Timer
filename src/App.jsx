@@ -1,18 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import Calcutator from "./components/Calcutator";
 
+function formatTime(date) {
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    year: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).format(date);
+}
+
 function App() {
   const [time, setTime] = useState(formatTime(new Date()));
-
-  function formatTime(date) {
-    return new Intl.DateTimeFormat("en", {
-      month: "short",
-      year: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    }).format(date);
-  }
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -46,7 +46,7 @@ function App() {
         numExercises: partOfDay === "AM" ? 5 : 4,
       },
     ];
-  }, []);
+  }, [partOfDay]);
 
   return (
     <main>

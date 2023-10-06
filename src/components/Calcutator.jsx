@@ -1,14 +1,26 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 function Calcutator({ workouts }) {
   const [number, setNumber] = useState(workouts.at(0).numExercises);
   const [sets, setSets] = useState(3);
   const [speed, setSpeed] = useState(90);
   const [durationBreak, setDurationBreak] = useState(5);
+  const [duration, setDuration] = useState(0);
 
-  const duration = number * sets * speed;
-  const mins = Math.floor(duration / 60);
-  const seconds = Math.floor(duration % 60);
+  useEffect(() => {
+    setDuration((number * sets * speed) / 60);
+  }, [number, sets, speed]);
+
+  const mins = Math.floor(duration);
+  const seconds = (duration - mins) * 60;
+
+  function handleInc() {
+    setDuration((duration) => duration + 1);
+  }
+
+  function handleDec() {
+    setDuration((duration) => duration - 1);
+  }
 
   return (
     <>
@@ -62,13 +74,13 @@ function Calcutator({ workouts }) {
         </div>
       </form>
       <section>
-        <button> - </button>
+        <button onClick={handleDec}> - </button>
         <p>
           {mins < 10 && 0}
           {mins}:{seconds < 10 && 0}
           {seconds}
         </p>
-        <button> + </button>
+        <button onClick={handleInc}> + </button>
       </section>
     </>
   );
