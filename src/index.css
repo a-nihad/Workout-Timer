@@ -15,6 +15,7 @@ body {
   background-image: linear-gradient(to right bottom, #80dfe1, #4e7afa);
 }
 main {
+  position: relative;
   background-color: #f7f7f7;
   padding: 5rem 8rem;
   border-radius: 9px;
@@ -111,4 +112,13 @@ section button {
   font-weight: 900;
   font-size: 1.8rem;
   cursor: pointer;
+}
+.btn-sound {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: transparent;
+  font-size: 3.2rem;
+  cursor: pointer;
+  border: none;
 }

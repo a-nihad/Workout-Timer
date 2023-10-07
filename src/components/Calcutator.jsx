@@ -1,10 +1,10 @@
 import { memo, useEffect, useState } from "react";
+import Sound from "../assets/ClickSound.wav";
 
-function Calcutator({ workouts }) {
+function Calcutator({ workouts, allowSound }) {
   const [number, setNumber] = useState(workouts.at(0).numExercises);
   const [sets, setSets] = useState(3);
   const [speed, setSpeed] = useState(90);
-  const [durationBreak, setDurationBreak] = useState(5);
   const [duration, setDuration] = useState(0);
   const [isActive, setIsActive] = useState(false);
 
@@ -28,6 +28,18 @@ function Calcutator({ workouts }) {
 
     return () => clearInterval(id);
   }, [duration, isActive]);
+
+  useEffect(() => {
+    const playSound = function () {
+      if (!allowSound) return;
+      if (isActive && duration > 0) {
+        const sound = new Audio(Sound);
+        sound.play();
+      }
+    };
+
+    playSound();
+  }, [isActive, allowSound, duration]);
 
   function handleInc() {
     setDuration((duration) => duration + 60);
@@ -75,17 +87,6 @@ function Calcutator({ workouts }) {
             onChange={(e) => setSpeed(Number(e.target.value))}
           />
           <span> {speed} sec/exercises </span>
-        </div>
-        <div>
-          <label> Break length </label>
-          <input
-            type="range"
-            min="1"
-            max="10"
-            value={durationBreak}
-            onChange={(e) => setDurationBreak(Number(e.target.value))}
-          />
-          <span> {durationBreak} minutes/break </span>
         </div>
         <button
           onClick={(e) => {

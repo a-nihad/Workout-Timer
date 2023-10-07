@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Calcutator from "./components/Calcutator";
+import ToggleSounds from "./components/ToggleSounds";
 
 function formatTime(date) {
   return new Intl.DateTimeFormat("en", {
@@ -13,6 +14,7 @@ function formatTime(date) {
 
 function App() {
   const [time, setTime] = useState(formatTime(new Date()));
+  const [allowSound, setAllowSound] = useState(true);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -52,7 +54,8 @@ function App() {
     <main>
       <h1> Workout timer </h1>
       <time> for your workout on {time} </time>
-      <Calcutator workouts={workouts} />
+      <ToggleSounds allowSound={allowSound} setAllowSound={setAllowSound} />
+      <Calcutator workouts={workouts} allowSound={allowSound} />
     </main>
   );
 }
