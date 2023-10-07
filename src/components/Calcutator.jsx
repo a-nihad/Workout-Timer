@@ -6,20 +6,35 @@ function Calcutator({ workouts }) {
   const [speed, setSpeed] = useState(90);
   const [durationBreak, setDurationBreak] = useState(5);
   const [duration, setDuration] = useState(0);
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    setDuration((number * sets * speed) / 60);
+    setDuration(number * sets * speed);
   }, [number, sets, speed]);
 
-  const mins = Math.floor(duration);
-  const seconds = (duration - mins) * 60;
+  const mins = Math.floor(duration / 60);
+  const seconds = Math.floor(duration % 60);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (duration === 0) {
+        setIsActive(false);
+      }
+
+      setDuration(
+        isActive && duration > 0 ? (duration) => duration - 1 : duration
+      );
+    }, 1000);
+
+    return () => clearInterval(id);
+  }, [duration, isActive]);
 
   function handleInc() {
-    setDuration((duration) => duration + 1);
+    setDuration((duration) => duration + 60);
   }
 
   function handleDec() {
-    setDuration((duration) => duration - 1);
+    setDuration(duration > 60 ? (duration) => duration - 60 : 0);
   }
 
   return (
@@ -72,6 +87,14 @@ function Calcutator({ workouts }) {
           />
           <span> {durationBreak} minutes/break </span>
         </div>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            setIsActive((isActive) => !isActive);
+          }}
+        >
+          {duration === 0 ? "Finished" : isActive ? "Pause" : "Active"}
+        </button>
       </form>
       <section>
         <button onClick={handleDec}> - </button>
